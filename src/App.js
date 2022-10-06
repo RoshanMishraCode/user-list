@@ -1,25 +1,47 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import AddedUserData from "./components/AddedUserData";
+import AddUserData from "./components/AddUserData";
+import NavButton from "./components/NavButton";
+import RemovedUser from "./components/RemovedUser";
+import { clearUserEmai } from "./redux/userSlice";
 
-function App() {
+const App = () => {
+  const dispatch = useDispatch();
+  const [showData, setShowData] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const onShowModalHandler = () => {
+    setShowModal(true);
+  };
+  const onCloseModalHandler = () => {
+    setShowModal(false);
+    dispatch(clearUserEmai());
+  };
+  const showUserDataHandler = () => {
+    setShowData(true);
+  };
+  const removedUserDataHandler = () => {
+    setShowData(false);
+  };
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container py-4 p-md-4">
+      <h1 className="py-2">React Task</h1>
+      <NavButton
+        showUser={showUserDataHandler}
+        removedUser={removedUserDataHandler}
+      />
+      <AddUserData
+        onShowModal={onShowModalHandler}
+        onCloseModal={onCloseModalHandler}
+        showModal={showModal}
+      />
+      {showData ? (
+        <AddedUserData onShowModal={onShowModalHandler} />
+      ) : (
+        <RemovedUser />
+      )}
     </div>
   );
-}
+};
 
 export default App;
